@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tourbillon Matrix Multicolore</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+
+  <script>
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&+=!?";
+    const numParticles = 600;
+    const particles = [];
+
+    // Couleurs vives style cyber rave
+    const colors = ["#00ff00", "#ff00ff", "#00ffff", "#ffff00", "#ff0000", "#ffffff", "#ff9900"];
+
+    // Initialisation des particules
+    for (let i = 0; i < numParticles; i++) {
+      particles.push({
+        angle: Math.random() * 2 * Math.PI,
+        radius: Math.random() * canvas.height / 2,
+        speed: 0.01 + Math.random() * 0.03,
+        size: 12 + Math.random() * 10,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        char: chars[Math.floor(Math.random() * chars.length)],
+        x: 0,
+        y: 0
+      });
+    }
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.06)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach(p => {
+        p.angle += p.speed;
+        p.radius += 0.2;
+
+        p.x = canvas.width / 2 + Math.cos(p.angle) * p.radius;
+        p.y = canvas.height / 2 + Math.sin(p.angle) * p.radius;
+
+        ctx.fillStyle = p.color;
+        ctx.font = `${p.size}px monospace`;
+        ctx.fillText(p.char, p.x, p.y);
+
+        // Réinitialisation quand la particule sort de l'écran
+        if (p.radius > Math.max(canvas.width, canvas.height)) {
+          p.radius = 0;
+          p.angle = Math.random() * 2 * Math.PI;
+          p.char = chars[Math.floor(Math.random() * chars.length)];
+          p.color = colors[Math.floor(Math.random() * colors.length)];
+        }
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    draw();
+  </script>
+</body>
+</html>
