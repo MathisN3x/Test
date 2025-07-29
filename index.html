@@ -1,78 +1,138 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Tourbillon Matrix Multicolore</title>
+  <meta charset="UTF-8">
+  <title>Pour Toi ❤️</title>
   <style>
     body {
-      margin: 0;
+      background: radial-gradient(circle, pink, crimson);
+      color: white;
+      font-family: 'Segoe UI', cursive;
+      text-align: center;
+      padding-top: 100px;
       overflow: hidden;
-      background: black;
     }
-    canvas {
-      display: block;
+
+    h1 {
+      font-size: 4em;
+      text-shadow: 2px 2px 5px #000;
+      animation: fadeIn 3s ease-in-out;
+    }
+
+    p {
+      font-size: 1.8em;
+      margin-top: 30px;
+    }
+
+    .heart {
+      font-size: 5em;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); color: red; }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .flower {
+      position: absolute;
+      top: -50px;
+      font-size: 2em;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh);
+        opacity: 0.8;
+      }
+    }
+
+    #message {
+      margin-top: 50px;
+      font-size: 2em;
+      color: white;
+      text-shadow: 2px 2px 8px #ff69b4;
+    }
+
+    #button {
+      margin-top: 40px;
+      font-size: 1.5em;
+      padding: 10px 30px;
+      background-color: gold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      animation: fadeIn 4s ease;
+    }
+
+    #popup {
+      display: none;
+      margin-top: 30px;
+      font-size: 1.6em;
+      color: #fff;
+      background-color: rgba(0,0,0,0.6);
+      padding: 20px;
+      border-radius: 10px;
+      animation: fadeIn 2s ease-in-out;
     }
   </style>
 </head>
 <body>
-  <canvas id="matrix"></canvas>
+  <div class="heart">💓</div>
+  <h1>Je t’aime, mon étoile ✨</h1>
+  <p>Ce site est mon cri du cœur pour toi. 💌</p>
 
+  <!-- Message dynamique -->
+  <div id="message"></div>
+
+  <!-- Bouton surprise -->
+  <button id="button">Clique ici 💖</button>
+  <div id="popup">Chaque jour à tes côtés est un poème dont tu es l’auteur... 🌹</div>
+
+  <!-- Fleurs tombantes -->
   <script>
-    const canvas = document.getElementById("matrix");
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&+=!?";
-    const numParticles = 600;
-    const particles = [];
-
-    // Couleurs vives style cyber rave
-    const colors = ["#00ff00", "#ff00ff", "#00ffff", "#ffff00", "#ff0000", "#ffffff", "#ff9900"];
-
-    // Initialisation des particules
-    for (let i = 0; i < numParticles; i++) {
-      particles.push({
-        angle: Math.random() * 2 * Math.PI,
-        radius: Math.random() * canvas.height / 2,
-        speed: 0.01 + Math.random() * 0.03,
-        size: 12 + Math.random() * 10,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        char: chars[Math.floor(Math.random() * chars.length)],
-        x: 0,
-        y: 0
-      });
+    const emojis = ["🌸", "🌺", "🌼", "💐"];
+    for (let i = 0; i < 30; i++) {
+      const flower = document.createElement('div');
+      flower.className = 'flower';
+      flower.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      flower.style.left = Math.random() * 100 + 'vw';
+      flower.style.animationDuration = (5 + Math.random() * 5) + 's';
+      document.body.appendChild(flower);
     }
 
-    function draw() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.06)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      particles.forEach(p => {
-        p.angle += p.speed;
-        p.radius += 0.2;
-
-        p.x = canvas.width / 2 + Math.cos(p.angle) * p.radius;
-        p.y = canvas.height / 2 + Math.sin(p.angle) * p.radius;
-
-        ctx.fillStyle = p.color;
-        ctx.font = `${p.size}px monospace`;
-        ctx.fillText(p.char, p.x, p.y);
-
-        // Réinitialisation quand la particule sort de l'écran
-        if (p.radius > Math.max(canvas.width, canvas.height)) {
-          p.radius = 0;
-          p.angle = Math.random() * 2 * Math.PI;
-          p.char = chars[Math.floor(Math.random() * chars.length)];
-          p.color = colors[Math.floor(Math.random() * colors.length)];
-        }
-      });
-
-      requestAnimationFrame(draw);
+    const text = "Je t’aime plus que les mots ne peuvent le dire.";
+    const messageDiv = document.getElementById("message");
+    let i = 0;
+    function typeText() {
+      if (i < text.length) {
+        messageDiv.textContent += text.charAt(i);
+        i++;
+        setTimeout(typeText, 100);
+      } else {
+        messageDiv.style.color = "gold";
+      }
     }
+    setTimeout(typeText, 1000);
 
-    draw();
+    const button = document.getElementById("button");
+    const popup = document.getElementById("popup");
+    button.onclick = function() {
+      popup.style.display = "block";
+    };
   </script>
+
+  <!-- Musique romantique -->
+  <audio autoplay loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    Ton navigateur ne supporte pas la musique 💕
+  </audio>
 </body>
 </html>
